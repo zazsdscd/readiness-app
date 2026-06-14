@@ -23,6 +23,17 @@ exploitable d'un simple formulaire.
 - **Demarrage progressif** : tant que la baseline n'est pas etablie, le score bascule sur un mapping absolu, signale a l'utilisateur.
 - **Historique demo** integre pour visualiser immediatement la valeur (75 jours simules avec un bloc d'entrainement charge).
 
+## Apercu
+
+Saisie quotidienne et readiness du jour :
+
+![Check-in du jour](docs/screenshot_checkin.png)
+
+Suivi dans le temps :
+
+![Mon etat dans le temps](docs/screenshot_trend1.png)
+![Mon etat dans le temps](docs/screenshot_trend2.png)
+
 ## Installation
 
 ```bash
