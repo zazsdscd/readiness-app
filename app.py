@@ -13,7 +13,7 @@ from src import config, database
 from src.scoring import compute_readiness
 from src.synthetic import generate_history
 
-st.set_page_config(page_title="Readiness", page_icon="🏃", layout="centered")
+st.set_page_config(page_title="Readiness", layout="centered")
 
 
 # ----------------------------- helpers UI -----------------------------
@@ -53,7 +53,7 @@ def status_banner(status: str):
 # ----------------------------- sidebar -----------------------------
 
 with st.sidebar:
-    st.header("⚙️ Donnees")
+    st.header("Donnees")
     st.caption("La baseline s'etablit apres "
                f"{config.BASELINE_MIN_DAYS} jours de check-in.")
     if st.button("Charger un historique demo (75 j)", use_container_width=True):
@@ -75,7 +75,7 @@ raw = database.fetch_all()
 scored = compute_readiness(raw) if not raw.empty else raw
 
 tab_checkin, tab_trend, tab_method = st.tabs(
-    ["✅ Check-in du jour", "📈 Mon etat dans le temps", "🧠 Methodo"]
+    ["Check-in du jour", "Mon etat dans le temps", "Methodo"]
 )
 
 
@@ -83,7 +83,7 @@ tab_checkin, tab_trend, tab_method = st.tabs(
 
 with tab_checkin:
     st.subheader("Comment tu te sens aujourd'hui ?")
-    st.caption("20 secondes, une fois par jour. Echelle 1 (bas) a 5 (haut).")
+    st.caption("Echelle 1 (bas) a 5 (haut).")
 
     today = date.today().isoformat()
     existing = raw[raw["date"] == pd.Timestamp(today)] if not raw.empty else pd.DataFrame()

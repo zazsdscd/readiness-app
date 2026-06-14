@@ -1,19 +1,17 @@
 # Demarche, choix de conception et pistes d'amelioration
 
-## 1. Lecture du besoin
+## 1. Objectifs
 
-Le brief parle d'une app mobile, mais le vrai sujet n'est pas l'app. C'est de
-capter la bonne information chaque jour pour suivre l'etat de l'athlete dans le
-temps. Deux contraintes s'opposent :
+Suivre l'évolution de l'etat physique et mental d'un athlete dans le temps. Deux contraintes :
 
-- la saisie doit etre rapide, sinon l'athlete arrete de la remplir et la serie
+- la saisie doit etre simple, rapide, sinon l'athlete arrete de la remplir et la serie
   temporelle se troue ;
 - l'info captee doit rester assez fiable pour servir a une analyse.
 
 J'ai donc d'abord travaille la qualite de la donnee dans le temps, avant de
 m'occuper de l'interface.
 
-## 2. Le questionnaire : peu de questions, mais les bonnes
+## 2. Le questionnaire.
 
 Plutot que multiplier les champs, je me suis base sur les questionnaires de
 wellness utilises en sport de haut niveau (type Hooper), qui resument l'etat de
@@ -30,14 +28,13 @@ forme percu en 4 ou 5 questions. J'ai garde :
 Plus la duree de sommeil, qui est presque une donnee objective et coute peu a
 saisir.
 
-Tous les items vont dans le meme sens : 5 = bon etat. J'ai reformule les items
-negatifs (fatigue devient energie, courbatures deviennent fraicheur). C'est plus
+Tous les items sont noté de 1 à 5 avec : 1 = mauvais état & 5 = bon etat. J'ai reformule les items negatifs (fatigue devient energie, courbatures deviennent fraicheur). C'est plus
 clair a remplir et ca evite les inversions de signe dans le calcul.
 
 ## 3. Le score : une readiness propre a chaque athlete
 
 Le point principal : une note brute ne dit pas grand-chose en absolu. Dormir 7h
-ou se noter 3/5 en energie n'a pas le meme sens d'une personne a l'autre, ni
+ou se noter 3/5 en energie n'a pas le meme sens d'un  athlète a l'autre, ni
 d'une periode a l'autre. Un seuil fixe pour tout le monde donnerait surtout du
 bruit.
 
@@ -59,7 +56,7 @@ Tant qu'il n'y a pas assez d'historique, la moyenne glissante n'existe pas.
 Plutot que d'afficher du vide, le score passe par un calcul simple (1-5 ramene a
 0-100), et l'app le signale. Il bascule en mode relatif apres 7 jours.
 
-## 4. Cote technique
+## 4. Stack technique
 
 - **Streamlit** pour aller vite tout en gardant une saisie agreable. Le check-in
   tient sur un ecran.
@@ -79,8 +76,7 @@ Plutot que d'afficher du vide, le score passe par un calcul simple (1-5 ramene a
 La readiness est un signal subjectif, en complement des donnees objectives
 recuperees a travers differents capteurs. Quelques usages :
 
-- la croiser avec la charge d'entrainement (le hook `apply_training_load` est
-  deja en place) pour distinguer une fatigue normale apres un gros bloc d'une
+- la croiser avec la charge d'entrainement pour distinguer une fatigue normale apres un gros bloc d'une
   fatigue inhabituelle ;
 - garder une reference subjective propre a chaque athlete, qui se precise avec
   le temps ;
