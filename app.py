@@ -96,9 +96,19 @@ with tab_checkin:
             int(prefill.get(item["key"], 3)),
             help=item["help"],
         )
-    sleep_hours = st.number_input(
-        "Heures de sommeil", 3.0, 12.0,
-        float(prefill.get("sleep_hours", 7.5)), step=0.5,
+    def fmt_hours(h):
+        total_min = int(round(float(h) * 60))
+        hh, mm = divmod(total_min, 60)
+        return f"{hh}h{mm:02d}"
+    sleep_opts = [round(3.0 + 0.25 * i, 2) for i in range(int((12.0 - 3.0) / 0.25) + 1)]
+    default_sleep = float(prefill.get("sleep_hours", 7.5))
+    if default_sleep not in sleep_opts:
+        default_sleep = min(sleep_opts, key=lambda x: abs(x - default_sleep))
+    sleep_hours = st.select_slider(
+        "Heures de sommeil",
+        options=sleep_opts,
+        value=default_sleep,
+        format_func=fmt_hours,
     )
     note = st.text_input("Note libre (optionnel)", value=str(prefill.get("note", "") or ""))
 
