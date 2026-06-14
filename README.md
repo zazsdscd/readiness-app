@@ -1,17 +1,15 @@
 # Readiness App
 
 Application de check-in quotidien de l'etat de forme d'un athlete d'endurance.
-L'athlete exprime son etat en 20 secondes, l'app en deduit un indice de
+L'athlete exprime son etat en 5 questions sur ses sensations physiques et mental. L'app en deduit un indice de
 **readiness relatif a sa propre baseline**, et restitue une tendance dans le
 temps qui peut nourrir le profil utilisateur et des analyses plus globales.
-
-Cas technique realise pour Enduraw.
 
 ![Readiness dans le temps](docs/readiness_timeline.png)
 
 ## Idee directrice
 
-Un score brut ("sommeil 3/5") ne veut rien dire dans l'absolu. Il prend du sens
+Un score brut ("sommeil 3/5") ne veut rien dire. Il prend du sens
 par rapport a l'habitude de l'athlete. Le modele compare donc chaque saisie a la
 baseline individuelle (moyenne et ecart-type glissants sur 28 jours) plutot qu'a
 un seuil universel. C'est le coeur de l'approche et ce qui distingue une mesure
