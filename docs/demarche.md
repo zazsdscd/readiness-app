@@ -56,7 +56,31 @@ Tant qu'il n'y a pas assez d'historique, la moyenne glissante n'existe pas.
 Plutot que d'afficher du vide, le score passe par un calcul simple (1-5 ramene a
 0-100), et l'app le signale. Il bascule en mode relatif apres 7 jours.
 
-## 4. Stack technique
+## 4. La charge d'entrainement, le volet objectif
+
+Le ressenti subjectif prend tout son sens croise avec la charge reelle. Les
+activites Strava (champ `relative_effort`) donnent une charge quotidienne, dont
+on derive les indicateurs classiques du "performance manager" :
+
+| Indicateur | Definition | Lecture |
+|---|---|---|
+| ATL | moyenne lissee de la charge sur 7 jours | fatigue recente |
+| CTL | moyenne lissee de la charge sur 42 jours | forme de fond |
+| TSB | CTL - ATL | fraicheur, positif = frais, negatif = fatigue de fond |
+| ACWR | charge des 7 derniers jours / moyenne hebdo sur 28 jours | charge aigue vs chronique |
+
+![Charge d'entrainement](training_load.png)
+
+L'ACWR module ensuite la readiness (`scoring.apply_training_load`) : au-dela de
+1.5, la charge aigue depasse nettement le niveau habituel, le score est penalise
+car la fatigue est attendue ; dans la zone 0.8 a 1.3, charge soutenable, le score
+est legerement valorise. La valeur avant modulation est conservee
+(`readiness_base`), ce qui permet de distinguer une fatigue *attendue* (gros bloc,
+ACWR en pic) d'une fatigue *anormale* a ressenti egal. Le ressenti synthetique de
+la demo est lui-meme cale sur cette charge Strava reelle : l'energie et la
+fraicheur baissent quand la charge du jour est forte et quand le TSB est negatif.
+
+## 5. Stack technique
 
 - **Streamlit** pour aller vite tout en gardant une saisie agreable. Le check-in
   tient sur un ecran.
@@ -65,13 +89,12 @@ Plutot que d'afficher du vide, le score passe par un calcul simple (1-5 ramene a
   calcul.
 - **Tout le calcul est dans `src/scoring.py`**, regle depuis `src/config.py`. On
   change les poids, la fenetre ou les seuils sans toucher au reste.
-- Faute de donnees reelles au moment du rendu, j'ai genere un historique
-  realiste (rythme de la semaine, bloc d'entrainement charge, mauvaises nuits)
-  pour verifier que le score reagit comme prevu. Le graphe
-  `docs/readiness_timeline.png` montre la readiness qui baisse pendant le bloc
-  charge et remonte ensuite.
+- Le ressenti demo est synthetique mais cale sur la charge Strava reelle (rythme
+  de la semaine, blocs charges issus des activites, mauvaises nuits) pour verifier
+  que le score reagit comme prevu. Le graphe `docs/readiness_timeline.png` montre
+  la readiness qui baisse sur les periodes de fatigue de fond et remonte ensuite.
 
-## 5. Place dans l'ecosysteme Enduraw
+## 6. Place dans l'ecosysteme Enduraw
 
 La readiness est un signal subjectif, en complement des donnees objectives
 recuperees a travers differents capteurs. Quelques usages :
@@ -83,7 +106,7 @@ recuperees a travers differents capteurs. Quelques usages :
 - plus tard, s'en servir comme base pour predire la perf ou un risque de
   blessure.
 
-## 6. Limites et pistes
+## 7. Limites et pistes
 
 - **Subjectivite** : un athlete recalibre sa perception avec le temps. Le
   z-score individuel limite ce biais sans l'effacer. On pourrait reancrer de
@@ -95,8 +118,9 @@ recuperees a travers differents capteurs. Quelques usages :
   lendemain, RPE de seance), on pourrait les apprendre par athlete.
 - **Donnees manquantes** : un jour saute troue la moyenne. Prevoir une
   imputation simple et suivre le taux de remplissage.
-- **Charge d'entrainement** : le volet objectif (ACWR, TSB/CTL/ATL) est prepare
-  mais pas branche. C'est l'etape suivante avec le plus de valeur, des que les
-  donnees Enduraw sont dispo.
+- **Calibration de la charge** : la modulation par l'ACWR s'appuie sur de vraies
+  donnees Strava, mais ses seuils (1.5, zone 0.8 a 1.3) et le poids relatif charge
+  contre ressenti restent heuristiques. A calibrer avec une cible (perf, RPE) une
+  fois les donnees Enduraw completes dispo.
 - **Items par discipline** : le trail et le triathlon n'ont pas forcement les
   memes signaux importants. Un profil par sport serait un plus.

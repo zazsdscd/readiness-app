@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from . import config
+from .training_load import acwr_on
 
 
 def _rolling_baseline_z(series: pd.Series) -> pd.Series:
@@ -58,11 +59,19 @@ def _absolute_fallback(row: pd.Series) -> float:
     return float(np.average(parts, weights=weights) * 100)
 
 
-def compute_readiness(df: pd.DataFrame) -> pd.DataFrame:
+def compute_readiness(
+    df: pd.DataFrame, load_df: pd.DataFrame | None = None
+) -> pd.DataFrame:
     """Ajoute readiness, statut et z-scores par composante au DataFrame.
 
     df doit etre trie par date croissante et contenir les colonnes des
     composantes (cf config.SCORE_COMPONENTS).
+
+    Si load_df est fourni, la readiness relative est ensuite modulee par la
+    charge d'entrainement : pour chaque jour on recupere l'ACWR via
+    training_load.acwr_on et on applique apply_training_load. La valeur avant
+    modulation est conservee dans readiness_base, et le statut est recalcule
+    sur la readiness modulee.
     """
     if df.empty:
         return df.assign(readiness=[], status=[], baseline_building=[])
@@ -103,6 +112,24 @@ def compute_readiness(df: pd.DataFrame) -> pd.DataFrame:
     out["readiness"] = readiness
     out["status"] = statuses
     out["baseline_building"] = building
+
+    # modulation par la charge d'entrainement (ACWR), si disponible
+    if load_df is not None:
+        out["readiness_base"] = out["readiness"]
+        modulated, mod_status = [], []
+        for _, row in out.iterrows():
+            base = row["readiness"]
+            if pd.isna(base):
+                modulated.append(np.nan)
+                mod_status.append(row["status"])
+                continue
+            acwr = acwr_on(row["date"], load_df)
+            r = round(float(apply_training_load(base, acwr)), 1)
+            modulated.append(r)
+            mod_status.append(_status(r))
+        out["readiness"] = modulated
+        out["status"] = mod_status
+
     return out
 
 

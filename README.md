@@ -20,6 +20,7 @@ exploitable d'un simple formulaire.
 - **Check-in quotidien** : 5 items de wellness (echelle 1-5) + heures de sommeil + note libre. Une saisie par jour, modifiable.
 - **Indice de readiness 0-100** avec statut relatif (au-dessus / dans / sous ta norme) et reco d'entrainement associee.
 - **Vue longitudinale** : evolution de la readiness, des composantes et du sommeil.
+- **Charge d'entrainement (Strava)** : courbes CTL/ATL, zone TSB et ACWR du jour, avec modulation de la readiness selon l'ACWR (fatigue attendue lors d'un gros bloc, distinguee d'une fatigue anormale).
 - **Demarrage progressif** : tant que la baseline n'est pas etablie, le score bascule sur un mapping absolu, signale a l'utilisateur.
 - **Historique demo** integre pour visualiser immediatement la valeur (75 jours simules avec un bloc d'entrainement charge).
 
@@ -33,6 +34,10 @@ Suivi dans le temps :
 
 ![Mon etat dans le temps](docs/screenshot_trend1.png)
 ![Mon etat dans le temps](docs/screenshot_trend2.png)
+
+Charge d'entrainement (charge quotidienne, CTL, ATL et TSB) issue de Strava :
+
+![Charge d'entrainement](docs/training_load.png)
 
 ## Installation
 
