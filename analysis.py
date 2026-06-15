@@ -24,7 +24,6 @@ from src.training_load import compute_training_load
 
 
 def _shade_regions(ax, dates, mask, color, alpha, label=None):
-    """Ombre les plages contigues ou mask est vrai (axvspan par segment)."""
     dates = pd.Series(dates).to_numpy()
     mask = pd.Series(mask).to_numpy()
     start, labeled = None, False
@@ -49,8 +48,8 @@ def readiness_figure(scored, load_df):
     ax.axhspan(28, 40, color="#fef3c7", alpha=0.6)
     ax.axhspan(0, 28, color="#fee2e2", alpha=0.6)
 
-    # marquer les periodes de fatigue de fond (TSB negatif), issues de la
-    # charge Strava reelle : c'est la que la readiness doit decrocher
+    # marquer les periodes de fatigue de fond (TSB negatif), issues de ma
+    # charge Strava
     _shade_regions(ax, scored.date, tsb < 0, color="#0f172a", alpha=0.08,
                    label="TSB negatif (fatigue de fond)")
 

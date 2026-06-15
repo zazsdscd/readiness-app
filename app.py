@@ -254,8 +254,8 @@ with tab_method:
     st.markdown("""
 #### Comment la readiness est calculee
 
-Un score brut (ex : *sommeil 3/5*) ne veut rien dire dans l'absolu. Il prend
-du sens **par rapport a la baseline de l'athlete lui-meme**.
+Un score brut (ex : *sommeil 3/5*), prend
+du sens **par rapport a la baseline de l'athlete**.
 
 1. **z-score individuel** : chaque composante est comparee a sa moyenne et son
    ecart-type sur les 28 jours precedents (fenetre glissante, sans fuite du
